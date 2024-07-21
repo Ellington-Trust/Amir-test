@@ -1,10 +1,8 @@
 package com.example.demo.Service;
 
 import org.springframework.stereotype.Service;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+
+import java.sql.*;
 import java.util.Vector;
 
 @Service
@@ -15,7 +13,6 @@ public class DatabaseHandler {
     Connection connection = null;
     Statement statement = null;
     ResultSet result = null;
-
     public void ExecuteCreateQuery(String query)
     {
         try {
@@ -27,7 +24,6 @@ public class DatabaseHandler {
         e.printStackTrace();
         }
     }
-
     public ResultSet ExecuteSelectQuery(String query)
     {
         try {
@@ -35,12 +31,16 @@ public class DatabaseHandler {
             connection = DriverManager.getConnection(url, user, password);
             statement = connection.createStatement();
             result = statement.executeQuery(query);
+            PreparedStatement ps = connection.prepareStatement("SELECT * from company");
+            ps.executeQuery();
+
             return result;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
 
     public void printResultTable()
     {
@@ -71,5 +71,6 @@ public class DatabaseHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 }
