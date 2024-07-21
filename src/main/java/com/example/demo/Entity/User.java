@@ -1,6 +1,4 @@
 package com.example.demo.Entity;
-
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,7 +10,7 @@ import lombok.Setter;
 @Entity(name = "user")
 public class User {
     @Id
-    private Integer id;
+    private Integer Uid;
     @Column
     private String firstName;
     @Column
@@ -25,7 +23,7 @@ public class User {
     private String address;
 
     public User(Integer _id, String _firstName, String _lastName, Integer _age, String _email) {
-        this.id = _id;
+        this.Uid = _id;
         this.firstName = _firstName;
         this.lastName = _lastName;
         this.age = _age;
