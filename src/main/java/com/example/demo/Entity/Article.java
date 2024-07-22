@@ -6,6 +6,7 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 @Entity(name = "Article")
@@ -32,6 +33,12 @@ public class Article {
         this.count = count;
         this.categoryId = CategoryId;
     }
+
     public Article(){
+    }
+
+    @Override
+    public String toString() {
+        return articleId + " " + title + " " + price + " " + company + " " + count + " " + categoryId;
     }
 }

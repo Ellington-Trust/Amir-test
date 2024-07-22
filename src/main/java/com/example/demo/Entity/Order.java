@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@Entity(name = "Order")
+@Entity(name = "my_order")
 public class Order {
     @Id
     private String orderId;
@@ -38,4 +38,10 @@ public class Order {
 
     public Order() {
     }
+
+    @Override
+    public String toString() {
+        return orderId + " " + customerId + " " + count + " " + articleId + " " + orderDate;
+    }
+
 }

@@ -7,6 +7,8 @@ import com.example.demo.Repository.OrderRepository;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.Utils.UniqueNumberGenerator;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -26,12 +28,20 @@ public class ShopService {
     void clear()
     {
         users.deleteAll();
+        orders.deleteAll();
+        articles.deleteAll();
     }
 
-    void addUser(Integer id , String fname , String lname , Integer age , String email)
+    public Optional<User> findUserById(Integer id) {
+        return users.findById(id);
+    }
+
+    public void addUser(Integer id, String fname, String lname, Integer age, String email , String address)
     {
         try{
-            users.save(new User(id , fname , lname , age , email));
+            if(findUserById(id).isPresent())
+                return;
+            users.save(new User(id , fname , lname , age , email , address));
         }
         catch (Exception e)
         {
@@ -39,25 +49,28 @@ public class ShopService {
         }
     }
 
-    boolean findUserById(Integer id) {
-        Optional<User> user = users.findById(id);
-        if (user.isPresent())
-        {
-            System.out.println("Your wanted User : " + user.get().toString());
-            return true;
+    public void addArticle(Integer articleId, String title, Integer price, String company, Integer count, Integer categoryId)
+    {
+        try{
+            if(findArticleById(articleId).isPresent())
+                return;
+            articles.save(new Article(articleId , title ,price , company , count , categoryId));
         }
-        else
+        catch (Exception e)
         {
-            System.out.println("Your wanted User not found");
-            return false;
+            e.printStackTrace();
         }
     }
 
-    void deleteUserById(Integer id) {
+    public void deleteUserById(Integer id) {
         users.deleteById(id);
     }
 
-    void findUserByFirstName(String FirstName)
+    public void deleteOrderById(String id) {
+        orders.deleteById(id);
+    }
+
+    public void findUserByFirstName(String FirstName)
     {
         List<User> usersList = users.findByFirstName(FirstName);
         if(!usersList.isEmpty())
@@ -67,28 +80,13 @@ public class ShopService {
             System.out.println("Your wanted User not found");
     }
 
-    void addArticle(Integer articleId, String title, Integer price, String company, Integer count, Integer CategoryId)
-    {
-        try{
-            articles.save(new Article(articleId, title, price, company, count, CategoryId));
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+
+    public Optional<Article> findArticleById(Integer id) {
+        return articles.findById(id);
     }
 
-    boolean findArticleById(Integer id) {
-        Optional<Article> article = articles.findById(id);
-        if (article.isPresent()) {
-            System.out.println("Your wanted article : " + article.get().toString());
-            return true;
-        }
-        else
-        {
-            System.out.println("Your wanted article not found");
-            return false;
-        }
+    public Optional<Order> findOrderById(String id) {
+        return orders.findById(id);
     }
 
     void deleteArticleById(Integer id) {
@@ -114,14 +112,12 @@ public class ShopService {
             System.out.println("This user doesn't have any order");
     }
 
-    void CreateOrder(Integer userId , Integer articleId , Integer count)
+    @Transactional
+    public void createOrder(Integer userId, Integer articleId, Integer count)
     {
-        if(findArticleById( articleId ) && findUserById(userId))
-        {
+        if(findArticleById(articleId).isPresent() && findUserById(userId).isPresent())
             orders.save(new Order(UniqueNumberGenerator.generateUUIDString() , userId , articleId , count));
-        }
-        else {
+        else
             System.out.println("Invalid IDs!!");
-        }
     }
 }

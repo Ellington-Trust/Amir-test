@@ -22,14 +22,20 @@ public class User {
     @Column
     private String address;
 
-    public User(Integer _id, String _firstName, String _lastName, Integer _age, String _email) {
+    public User(Integer _id, String _firstName, String _lastName, Integer _age, String _email , String _address) {
         this.Uid = _id;
         this.firstName = _firstName;
         this.lastName = _lastName;
         this.age = _age;
         this.email = _email;
+        this.address = _address;
     }
 
     public User() {
+    }
+
+    @Override
+    public String toString() {
+        return Uid + " " + firstName + " " + lastName + " " + age + " " + email + " " + address;
     }
 }
