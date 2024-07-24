@@ -3,14 +3,14 @@ package com.example.demo.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Date;
 import java.time.LocalDate;
 
-@Getter
-@Setter
+@Data
 @Entity(name = "my_order")
 public class Order {
     @Id
